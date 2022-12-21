@@ -15,7 +15,7 @@ import os
 from multiprocessing import cpu_count
 from tqdm import tqdm
 import importlib
-from hparams import hparams
+#from hparams import hparams
 
 
 def preprocess(mod, in_dir, out_root, num_workers):
@@ -29,7 +29,7 @@ def write_metadata(metadata, out_dir):
         for m in metadata:
             f.write('|'.join([str(x) for x in m]) + '\n')
     frames = sum([m[2] for m in metadata])
-    sr = hparams.sample_rate
+    sr = 22050#hparams.sample_rate
     hours = frames / sr / 3600
     print('Wrote %d utterances, %d time steps (%.2f hours)' % (len(metadata), frames, hours))
     print('Max input length:  %d' % max(len(m[3]) for m in metadata))
@@ -46,14 +46,14 @@ if __name__ == "__main__":
     preset = args["--preset"]
 
     # Load preset if specified
-    if preset is not None:
-        with open(preset) as f:
-            hparams.parse_json(f.read())
+    #if preset is not None:
+    #    with open(preset) as f:
+    #        hparams.parse_json(f.read())
     # Override hyper parameters
-    hparams.parse(args["--hparams"])
-    assert hparams.name == "wavenet_vocoder"
+    #hparams.parse(args["--hparams"])
+    #assert hparams.name == "wavenet_vocoder"
 
-    print("Sampling frequency: {}".format(hparams.sample_rate))
+    #print("Sampling frequency: {}".format(hparams.sample_rate))
 
     assert name in ["cmu_arctic", "ljspeech", "librivox", "jsut"]
     mod = importlib.import_module(name)

@@ -21,7 +21,7 @@ from os.path import dirname, join, basename, splitext
 import numpy as np
 import librosa
 import scipy.signal as dsp
-from hparams import hparams
+#from hparams import hparams
 
 def postprocess(g=None, vt=None):
     length = g.shape[0]
@@ -50,12 +50,12 @@ if __name__ == "__main__":
     preset = args["--preset"]
 
     # Load preset if specified
-    if preset is not None:
-        with open(preset) as f:
-            hparams.parse_json(f.read())
+    #if preset is not None:
+    #    with open(preset) as f:
+    #        hparams.parse_json(f.read())
     # Override hyper parameters
-    hparams.parse(args["--hparams"])
-    assert hparams.name == "wavenet_vocoder"
+    #hparams.parse(args["--hparams"])
+    #assert hparams.name == "wavenet_vocoder"
 
     # Load features
     if vocaltract_path is not None and glot_path is not None :
@@ -86,7 +86,8 @@ if __name__ == "__main__":
     waveform = postprocess(g, vt)
 
     # save
-    librosa.output.write_wav(dst_wav_path, waveform, sr=hparams.sample_rate)
+    sr = 22050
+    librosa.output.write_wav(dst_wav_path, waveform, sr=sr)
 
     print("Finished! Check out {} for generated audio samples.".format(dst_dir))
     sys.exit(0)
