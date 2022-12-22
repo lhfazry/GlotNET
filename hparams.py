@@ -1,11 +1,14 @@
 import tensorflow as tf
 import numpy as np
+from tensorboard.plugins.hparams import api as hp
 
 # NOTE: If you want full control for model architecture. please take a look
 # at the code and change whatever you want. Some hyper parameters are hardcoded.
 
 # Default hyperparameters:
-hparams = tf.contrib.training.HParams(
+#hparams = tf.contrib.training.HParams(
+#hparams = dict(
+hparams = hp.HParam(
     name="wavenet_vocoder",
 
     # Convenient model builder
