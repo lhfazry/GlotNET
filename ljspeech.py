@@ -34,6 +34,7 @@ def _process_utterance(out_dir, index, wav_path, text):
     wav = audio.load_wav(wav_path)
     
     fs = hparams['sample_rate']
+    print(f"sample rate: {fs}")
 
     if hparams['rescaling']:
         wav = wav / np.abs(wav).max() * hparams['rescaling_max']
