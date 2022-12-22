@@ -1,3 +1,5 @@
 SciPy
 tensorflow
 docopt
+lws
+nnmnkwii

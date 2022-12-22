@@ -33,10 +33,10 @@ def _process_utterance(out_dir, index, wav_path, text):
     # Load the audio to a np array:
     wav = audio.load_wav(wav_path)
     
-    fs = hparams.sample_rate
+    fs = hparams['sample_rate']
 
-    if hparams.rescaling:
-        wav = wav / np.abs(wav).max() * hparams.rescaling_max
+    if hparams['rescaling']:
+        wav = wav / np.abs(wav).max() * hparams['rescaling_max']
         
     out = wav
     constant_values = 0.0
@@ -47,7 +47,7 @@ def _process_utterance(out_dir, index, wav_path, text):
     mel_spectrogram = audio.melspectrogram(wav).astype(np.float32).T
     # lws pads zeros internally before performing stft
     # this is needed to adjust time resolution between audio and mel-spectrogram
-    l, r = audio.lws_pad_lr(wav, hparams.fft_size, audio.get_hop_size())
+    l, r = audio.lws_pad_lr(wav, hparams['fft_size'], audio.get_hop_size())
 
     # zero pad for quantized signal
     out = np.pad(out, (l, r), mode="constant", constant_values=constant_values)
@@ -94,12 +94,12 @@ def _process_utterance(out_dir, index, wav_path, text):
     % diminish ripple in the beginning of the frame. The ramp is removed after
     % filtering.
     '''
-    le=np.int(len(out)/hparams.hop_size)
+    le=np.int(len(out)/hparams['hop_size'])
     glot=np.zeros([le, 254])
     vtfilter=np.zeros([le, 5])
     
     for j in range(le):
-        w = out[hparams.hop_size*(j):hparams.hop_size*(j+1)]
+        w = out[hparams['hop_size'] *(j):hparams['hop_size'] *(j+1)]
         
         #print(wav[(hparams.hop_size)*(i):(hparams.hop_size)*(i+1)])
         for i in range(hpfilt):
