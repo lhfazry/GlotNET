@@ -25,6 +25,7 @@ def preprocess(mod, in_dir, out_root, num_workers):
 
 
 def write_metadata(metadata, out_dir):
+    print(metadata)
     with open(os.path.join(out_dir, 'train.txt'), 'w', encoding='utf-8') as f:
         for m in metadata:
             f.write('|'.join([str(x) for x in m]) + '\n')
