@@ -10,16 +10,16 @@ import lws
 
 
 def load_wav(path):
-    return librosa.core.load(path, sr=hparams.sample_rate)[0]
+    return librosa.core.load(path, sr=hparams['sample_rate'])[0]
 
 
 def save_wav(wav, path):
     wav *= 32767 / max(0.01, np.max(np.abs(wav)))
-    wavfile.write(path, hparams.sample_rate, wav.astype(np.int16))
+    wavfile.write(path, hparams['sample_rate'], wav.astype(np.int16))
 
 
 def trim(quantized):
-    start, end = start_and_end_indices(quantized, hparams.silence_threshold)
+    start, end = start_and_end_indices(quantized, hparams['silence_threshold'])
     return quantized[start:end]
 
 
@@ -44,7 +44,7 @@ def adjust_time_resolution(quantized, mel):
         mel = np.pad(mel, [(0, n_pad), (0, 0)], mode="constant", constant_values=0)
 
     # trim
-    start, end = start_and_end_indices(quantized, hparams.silence_threshold)
+    start, end = start_and_end_indices(quantized, hparams['silence_threshold'])
 
     return quantized[start:end], mel[start:end, :]
 adjast_time_resolution = adjust_time_resolution  # 'adjust' is correct spelling, this is for compatibility
@@ -66,22 +66,22 @@ def start_and_end_indices(quantized, silence_threshold=2):
 
 def melspectrogram(y):
     D = _lws_processor().stft(y).T
-    S = _amp_to_db(_linear_to_mel(np.abs(D))) - hparams.ref_level_db
-    if not hparams.allow_clipping_in_normalization:
-        assert S.max() <= 0 and S.min() - hparams.min_level_db >= 0
+    S = _amp_to_db(_linear_to_mel(np.abs(D))) - hparams['ref_level_db']
+    if not hparams['allow_clipping_in_normalization']:
+        assert S.max() <= 0 and S.min() - hparams['min_level_db'] >= 0
     return _normalize(S)
 
 
 def get_hop_size():
-    hop_size = hparams.hop_size
+    hop_size = hparams['hop_size']
     if hop_size is None:
-        assert hparams.frame_shift_ms is not None
-        hop_size = int(hparams.frame_shift_ms / 1000 * hparams.sample_rate)
+        assert hparams['frame_shift_ms'] is not None
+        hop_size = int(hparams['frame_shift_ms'] / 1000 * hparams['sample_rate'])
     return hop_size
 
 
 def _lws_processor():
-    return lws.lws(hparams.fft_size, get_hop_size(), mode="speech")
+    return lws.lws(hparams['fft_size'], get_hop_size(), mode="speech")
 
 
 def lws_num_frames(length, fsize, fshift):
@@ -118,14 +118,14 @@ def _linear_to_mel(spectrogram):
 
 
 def _build_mel_basis():
-    assert hparams.fmax <= hparams.sample_rate // 2
-    return librosa.filters.mel(hparams.sample_rate, hparams.fft_size,
-                               fmin=hparams.fmin, fmax=hparams.fmax,
-                               n_mels=hparams.num_mels)
+    assert hparams['fmax'] <= hparams['sample_rate'] // 2
+    return librosa.filters.mel(hparams['sample_rate'], hparams['fft_size'],
+                               fmin=hparams['fmin'], fmax=hparams['fmax'],
+                               n_mels=hparams['num_mels'])
 
 
 def _amp_to_db(x):
-    min_level = np.exp(hparams.min_level_db / 20 * np.log(10))
+    min_level = np.exp(hparams['min_level_db'] / 20 * np.log(10))
     return 20 * np.log10(np.maximum(min_level, x))
 
 
@@ -134,8 +134,8 @@ def _db_to_amp(x):
 
 
 def _normalize(S):
-    return np.clip((S - hparams.min_level_db) / -hparams.min_level_db, 0, 1)
+    return np.clip((S - hparams['min_level_db']) / -hparams['min_level_db'], 0, 1)
 
 
 def _denormalize(S):
-    return (np.clip(S, 0, 1) * -hparams.min_level_db) + hparams.min_level_db
+    return (np.clip(S, 0, 1) * -hparams['min_level_db']) + hparams['min_level_db']
