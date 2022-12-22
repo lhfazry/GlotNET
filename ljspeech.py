@@ -84,8 +84,10 @@ def _process_utterance(out_dir, index, wav_path, text):
     Therefore, the computed filter is returned and can be passed to this
     function later on to avoid the calculated of the (same) filter.
     '''
-    B = dsp.firls(Nfir, [0, Fstop/(fs/2), Fpass/(fs/2), fs/2], [0, 0, 1, 1], [1, 1])
-
+    try:
+        B = dsp.firls(Nfir, [0, Fstop/(fs/2), Fpass/(fs/2), fs/2], [0, 0, 1, 1], [1, 1])
+    except:
+        return
 
 
     '''
