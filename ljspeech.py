@@ -46,6 +46,7 @@ def _process_utterance(out_dir, index, wav_path, text):
     # Compute a mel-scale spectrogram from the trimmed wav:
     # (N, D)
     mel_spectrogram = audio.melspectrogram(wav).astype(np.float32).T
+    print(mel_spectrogram)
     # lws pads zeros internally before performing stft
     # this is needed to adjust time resolution between audio and mel-spectrogram
     l, r = audio.lws_pad_lr(wav, hparams['fft_size'], audio.get_hop_size())
