@@ -24,12 +24,12 @@ def build_from_path(in_dir, out_dir, num_workers=1, tqdm=lambda x: x):
             wav_path = os.path.join(in_dir, 'wavs', '%s.wav' % parts[0])
             text = parts[2]
             futures.append(executor.submit(
-                partial(_process_utterance, out_dir, index, wav_path, text)))
+                partial(process_utterance, out_dir, index, wav_path, text)))
             index += 1
     return [future.result() for future in tqdm(futures)]
 
 
-def _process_utterance(out_dir, index, wav_path, text):
+def process_utterance(out_dir, index, wav_path, text):
     # Load the audio to a np array:
     wav = audio.load_wav(wav_path)
     
@@ -46,7 +46,6 @@ def _process_utterance(out_dir, index, wav_path, text):
     # Compute a mel-scale spectrogram from the trimmed wav:
     # (N, D)
     mel_spectrogram = audio.melspectrogram(wav).astype(np.float32).T
-    print(mel_spectrogram)
     # lws pads zeros internally before performing stft
     # this is needed to adjust time resolution between audio and mel-spectrogram
     l, r = audio.lws_pad_lr(wav, hparams['fft_size'], audio.get_hop_size())
