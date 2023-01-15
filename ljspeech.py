@@ -181,7 +181,7 @@ def _process_utterance(out_dir, index, wav_path, text):
         vtfilter[j-1]=a.T
 
     glot = np.reshape(glot, [254*le])
-    #print(glot)
+    print(glot)
 
     # Write the spectrograms to disk:
     audio_filename = 'ljspeech-audio-%05d.npy' % index
