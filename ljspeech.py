@@ -86,7 +86,8 @@ def _process_utterance(out_dir, index, wav_path, text):
     '''
     try:
         B = dsp.firls(Nfir, [0, Fstop/(fs/2), Fpass/(fs/2), fs/2], [0, 0, 1, 1], [1, 1])
-    except:
+    except Exception as e:
+        print(e)
         return
 
 
