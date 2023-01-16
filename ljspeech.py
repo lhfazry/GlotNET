@@ -117,7 +117,7 @@ def process_utterance(out_dir, index, wav_path, text):
         signal = np.concatenate((np.linspace(-w[0],w[0],preflt),  w))
         
         windowed = w*win
-        t=dsp.correlate(windowed,windowed)
+        t=dsp.correlate(windowed, windowed)
         l=len(win)
         try:
             Hg1 = lpcsolve(t[l:l+1],t[l+1:l+2]);
