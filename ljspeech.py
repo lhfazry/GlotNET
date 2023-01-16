@@ -85,7 +85,7 @@ def process_utterance(out_dir, index, wav_path, text):
     function later on to avoid the calculated of the (same) filter.
     '''
     try:
-        B = dsp.firls(Nfir, [0, Fstop/(fs/2), Fpass/(fs/2), fs/2], [0, 0, 1, 1], [1, 1])
+        B = dsp.firls(Nfir, [0, Fstop/(fs/2), Fpass/(fs/2), fs/2], [0, 0, 1, 1], [1, 1], fs=fs)
     except Exception as e:
         print(f"Error: {e}")
         return
