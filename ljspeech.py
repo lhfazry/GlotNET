@@ -9,6 +9,7 @@ from scipy.linalg import solve_toeplitz as lpcsolve
 from nnmnkwii import preprocessing as P
 from hparams import hparams
 from os.path import exists
+from pathlib import Path
 import librosa
 
 from wavenet_vocoder.util import is_mulaw_quantize, is_mulaw, is_raw
@@ -184,11 +185,19 @@ def process_utterance(out_dir, index, wav_path, text):
     glot = np.reshape(glot, [254*le])
     #print(glot)
 
+    filename = Path(wav_path).stem
+
     # Write the spectrograms to disk:
-    audio_filename = 'ljspeech-audio-%05d.npy' % index
-    glot_filename = 'ljspeech-glot-%05d.npy' % index
-    vt_filename = 'ljspeech-vt-%05d.npy' % index
-    mel_filename = 'ljspeech-mel-%05d.npy' % index
+    #audio_filename = 'ljspeech-audio-%05d.npy' % index
+    #glot_filename = 'ljspeech-glot-%05d.npy' % index
+    #vt_filename = 'ljspeech-vt-%05d.npy' % index
+    #mel_filename = 'ljspeech-mel-%05d.npy' % index
+
+    audio_filename = f"{filename}-audio.npy"
+    glot_filename = f"{filename}-glot.npy"
+    vt_filename = f"{filename}-vt.npy"
+    mel_filename = f"{filename}-mel.npy"
+
     np.save(os.path.join(out_dir, audio_filename),
             out.astype(out_dtype), allow_pickle=False)
     np.save(os.path.join(out_dir, glot_filename),
