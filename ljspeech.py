@@ -208,4 +208,4 @@ def process_utterance(out_dir, index, wav_path, text):
             mel_spectrogram.astype(np.float32), allow_pickle=False)
 
     # Return a tuple describing this training example:
-    return (audio_filename, mel_filename, glot_filename, vt_filename, timesteps, text)
+    return (audio_filename, mel_filename, glot_filename, vt_filename, len(wav), timesteps, text)
